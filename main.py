@@ -1,27 +1,4 @@
 class Vector:
-    '''
-    Vector
-    ======
-
-    setX(float): sæt værdien af vektorens x-koordinat
-
-    setY(float): sæt værdien af vektorens y-koordinat
-    
-    getX(): returner x-værdien
-
-    getY(): returner y-værdien 
-
-    setColor(3-tuple): sæt farven på vektoren
-    
-    setWidth(float): sæt bredden på vektoren
-
-    setName(string): sæt navnet på vektoren
-
-    add(v1): adder en vektor til vektoren
-
-    add2(v1, v2): returner vektorsummen af 2 vektorer
-
-    '''
     def __init__(self, x=0.0, y=0.0, color=(0, 0, 0), width=5, name="Vector"):
         self.setX(x)
         self.setY(y)
@@ -55,7 +32,7 @@ class Vector:
         self.setX(self.getX()+v2.getX())
         self.setX(self.getY()+v2.getY())
     
-    def add2(self, v1, v2):
+    def add2(v1, v2):
         return Vector(x=v1.getX()+v2.getX(), y=v1.getY()+v2.getY())
     
     def dot(self, v1, v2):
@@ -70,4 +47,12 @@ class Vector:
     def normalize(self, len=1.0):
         self.setX(self.getX()/self.getLen()*len)
         self.setY(self.getY()/self.getLen()*len)
-    
+
+
+v1 = Vector(10, 5, name="My Vector")
+v2 = Vector(2, 2)
+v3 = Vector.add2(v1, v2)
+
+print(f"v1: [{v1.getX()}, {v1.getY()}]")
+print(f"v2: [{v2.getX()}, {v2.getY()}]")
+print(f"v3: [{v3.getX()}, {v3.getY()}]")
