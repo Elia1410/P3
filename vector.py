@@ -80,6 +80,9 @@ class Vector2d:
         self.__name__ = newName
 
     def copy(self):
+        """
+        Returnerer en kopi af vektoren, med ens x- og y-koordinater, farve, bredde og navn
+        """
         return Vector2d(self.__x__, self.__y__, self.__color__, self.__width__, self.__name__)
 
     def add(self, v):
@@ -96,6 +99,9 @@ class Vector2d:
         return Vector2d(x=v1.getX()+v2.getX(), y=v1.getY()+v2.getY())
     
     def multiply(self, mult):
+        """
+        Ganger vektorens x- og y-koordinater med mult
+        """
         self.setX(self.getX()*mult)
         self.setY(self.getY()*mult)
     
@@ -142,10 +148,16 @@ class Vector2d:
         return copy
     
     def negate(self):
+        """
+        Modsætter retningen af vektoren
+        """
         self.setX(self.getX() * -1)
-        self.setX(self.getY() * -1)
+        self.setY(self.getY() * -1)
 
     def negated(self):
+        """
+        Returnerer den modsatte vektor uden at ændre den originale vektor
+        """
         copy = self.copy()
         copy.negate()
         return copy
@@ -172,11 +184,10 @@ class Vector2d:
         """
         Returnerer om vektoren har modsat retning til vektor v eller ej
         """
-        return self.normalized(v.getLen()).negated().isEqual(v)
+        return self.negated().isEqual(v)
 
 
 if __name__ == "__main__":
-    print('\n\n Vector sum')
     v1 = Vector2d(10, 5, name="vector 1")
     v2 = Vector2d(2, 2, name="vector 2")
     v3 = Vector2d.add2(v1, v2)
@@ -199,8 +210,11 @@ if __name__ == "__main__":
     print(f"v3: [{v3.getX()}, {v3.getY()}] \t '{v3.getName()}'")
     print(f"v4: [{v4.getX()}, {v4.getY()}] \t '{v4.getName()}'")
 
+    print(f"length of v2 = {v2.getLen()}")
+
     print(f"v1 is equal to v1: {v1.isEqual(v1)}")
     print(f"v1 is opposite of v2: {v1.isOpposite(v2)}")
     print(f"v1 is opposite of v3: {v1.isOpposite(v3)}")
     print(f"v1 is parallel with v3: {v1.isParallel(v3)}")
     print(f"v1 is perpendicular with v3: {v1.isPerpendicular(v3)}")
+    print(f"v1 is perpendicular with v4: {v1.isPerpendicular(v4)}")
