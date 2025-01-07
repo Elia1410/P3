@@ -3,15 +3,15 @@ from math import sqrt, pow
 class Vector2d:
     """
     Vector2d
-    ======
+    ========
 
     Vector2d klassen indeholder metoderne relevante til at arbejde med vektorer i to dimensioner.
-    
+
     """
     def __init__(self, x=0.0, y=0.0, color=(0, 0, 0), width=5, name="Vector"):
         """
         Instantieres en vektor uden argumenter, vil en nulvektor med \n
-        predefineret navn farve og bredde oprettes.
+        predefineret navn, farve og bredde oprettes.
         """
         self.setX(x)
         self.setY(y)
@@ -121,7 +121,7 @@ class Vector2d:
         """
         Returnerer den tilnærmede længde af vektoren (Manhattan afstand). \n
         Denne metode til at finde afstanden er hurtigere en getLen, men giver en forholdsvis upræcis afstand. \n
-        Afstanden er dog sammenlignelig.
+        Manhattanafstanden har dog fordelen af stadig at være sammenlignelig.
         """
         return abs(self.getX()) + abs(self.getY())
     
@@ -137,7 +137,24 @@ class Vector2d:
         Returnerer den normaliseret vektor med længden 'len'. \n
         Ændrer ikke på den originale vektor.
         """
-        return self.copy().normalize(len)
+        copy = self.copy()
+        copy.normalize()
+        return copy
+    
+    def negate(self):
+        self.setX(self.getX() * -1)
+        self.setX(self.getY() * -1)
+
+    def negated(self):
+        copy = self.copy()
+        copy.negate()
+        return copy
+    
+    def isEqual(self, v):
+        """
+        Returnerer om vektoren har samme koordinater som vektoren v
+        """
+        return self.getX() == v.getX() and self.getY() == v.getY()
 
     def isParallel(self, v):
         """
@@ -155,16 +172,35 @@ class Vector2d:
         """
         Returnerer om vektoren har modsat retning til vektor v eller ej
         """
-        vNorm = v.normalized()
-        selfNorm = self.normalized()
-        return (vNorm.getX() - selfNorm.getX()*-1) + (vNorm.getY() - selfNorm.getY()*-1) == 0
+        return self.normalized(v.getLen()).negated().isEqual(v)
 
 
 if __name__ == "__main__":
-    v1 = Vector2d(10, 5, name="My Vector")
-    v2 = Vector2d(2, 2)
+    print('\n\n Vector sum')
+    v1 = Vector2d(10, 5, name="vector 1")
+    v2 = Vector2d(2, 2, name="vector 2")
     v3 = Vector2d.add2(v1, v2)
+    v3.setName("vector 3 (sum of v1 and v2)")
 
     print(f"v1: [{v1.getX()}, {v1.getY()}] \t '{v1.getName()}'")
     print(f"v2: [{v2.getX()}, {v2.getY()}] \t '{v2.getName()}'")
     print(f"v3: [{v3.getX()}, {v3.getY()}] \t '{v3.getName()}'")
+
+    v3.add(v2)
+    print(f"v3+v2: [{v3.getX()}, {v3.getY()}] \t '{v3.getName()}'")
+
+    v1 = Vector2d(5, 5, name="vector 1")
+    v2 = Vector2d(-5, -5, name="vector 2")
+    v3 = Vector2d(-1, -1, name="vector 3")
+    v4 = Vector2d(-3, 3, name="vector 4")
+
+    print(f"v1: [{v1.getX()}, {v1.getY()}] \t '{v1.getName()}'")
+    print(f"v2: [{v2.getX()}, {v2.getY()}] \t '{v2.getName()}'")
+    print(f"v3: [{v3.getX()}, {v3.getY()}] \t '{v3.getName()}'")
+    print(f"v4: [{v4.getX()}, {v4.getY()}] \t '{v4.getName()}'")
+
+    print(f"v1 is equal to v1: {v1.isEqual(v1)}")
+    print(f"v1 is opposite of v2: {v1.isOpposite(v2)}")
+    print(f"v1 is opposite of v3: {v1.isOpposite(v3)}")
+    print(f"v1 is parallel with v3: {v1.isParallel(v3)}")
+    print(f"v1 is perpendicular with v3: {v1.isPerpendicular(v3)}")
