@@ -11,7 +11,7 @@ class Vector2d:
     def __init__(self, x=0.0, y=0.0, color=(0, 0, 0), width=5, name="Vector"):
         """
         Instantieres en vektor uden argumenter, vil en nulvektor med \n
-        predefineret navn farve og bredde oprettes
+        predefineret navn farve og bredde oprettes.
         """
         self.setX(x)
         self.setY(y)
