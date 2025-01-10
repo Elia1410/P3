@@ -1,14 +1,15 @@
 from math import sqrt, pow
+import pygame
 
 class Vector2d:
     """
     Vector2d
-    ========
+    --------
 
     Vector2d klassen indeholder metoderne relevante til at arbejde med vektorer i to dimensioner.
 
     """
-    def __init__(self, x=0.0, y=0.0, color=(0, 0, 0), width=5, name="Vector"):
+    def __init__(self, x=0.0, y=0.0, color=(0.0, 0.0, 0.0), width=5, name="Vector"):
         """
         Instantieres en vektor uden argumenter, vil en nulvektor med \n
         predefineret navn, farve og bredde oprettes.
@@ -23,67 +24,67 @@ class Vector2d:
         """
         Returnerer x-værdien for vektoren.
         """
-        return self.__x__
+        return self.__x
     
     def getY(self):
         """
         Returnerer y-værdien for vektoren.
         """
-        return self.__y__
+        return self.__y
     
     def getColor(self):
         """
         Returnerer vektorens farve.
         """
-        return self.__color__
+        return self.__color
     
     def getWidth(self):
         """
         Returnerer vektorens bredde.
         """
-        return self.__width__
+        return self.__width
     
     def getName(self):
         """
         Returnerer vektorens navn.
         """
-        return self.__name__
+        return self.__name
 
     def setX(self, newX: float):
         """
         Sætter x-værdien for vektoren.
         """
-        self.__x__ = newX
+        self.__x = newX
 
     def setY(self, newY: float):
         """
         Sætter y-værdien for vektoren.
         """
-        self.__y__ = newY
+        self.__y = newY
 
     def setColor(self, newColor: tuple):
         """
         Sætter farven på vektoren. Relevant når man vil tegne vektoren på skærmen.
         """
-        self.__color__ = newColor
+        self.__color = newColor
 
     def setWidth(self, newWidth: float):
         """
         Sætter bredden på vektoren. Relevant når man vil tegne vektoren på skærmen.
         """
-        self.__width__ = newWidth
+        self.__width = newWidth
     
     def setName(self, newName: str):
         """
         Sætter navnet på vektoren. Relevant når man vil tegne vektoren på skærmen.
         """
-        self.__name__ = newName
+        self.__name = newName
 
     def copy(self):
         """
-        Returnerer en kopi af vektoren, med ens x- og y-koordinater, farve, bredde og navn
+        Returnerer en kopi af vektoren, med ens x- og y-koordinater, farve, bredde og navn.
         """
-        return Vector2d(self.__x__, self.__y__, self.__color__, self.__width__, self.__name__)
+        return Vector2d(self.__x, self.__y, self.__color, self.__width, self.__name)
 
     def add(self, v):
         """
@@ -100,7 +101,7 @@ class Vector2d:
     
     def multiply(self, mult):
         """
-        Ganger vektorens x- og y-koordinater med mult
+        Ganger vektorens x- og y-koordinater med værdien 'mult'.
         """
         self.setX(self.getX()*mult)
         self.setY(self.getY()*mult)
@@ -135,8 +136,7 @@ class Vector2d:
         """
         Normaliserer vektoren til længden 'len'. Standard værdien for 'len' er 1.
         """
-        self.setX(self.getX()/self.getLen()*len)
-        self.setY(self.getY()/self.getLen()*len)
+        self.multiply(len/self.getLen())
 
     def normalized(self, len=1.0):
         """
@@ -149,14 +149,13 @@ class Vector2d:
     
     def negate(self):
         """
-        Modsætter retningen af vektoren
+        Modsætter retningen af vektoren.
         """
-        self.setX(self.getX() * -1)
-        self.setY(self.getY() * -1)
+        self.multiply(-1)
 
     def negated(self):
         """
-        Returnerer den modsatte vektor uden at ændre den originale vektor
+        Returnerer den modsatte vektor uden at ændre den originale vektor.
         """
         copy = self.copy()
         copy.negate()
@@ -164,7 +163,7 @@ class Vector2d:
     
     def isEqual(self, v):
         """
-        Returnerer om vektoren har samme koordinater som vektoren v
+        Returnerer om vektoren har samme koordinater som vektoren v.
         """
         return self.getX() == v.getX() and self.getY() == v.getY()
 
@@ -172,7 +171,7 @@ class Vector2d:
         """
         Returnerer om vektoren er parallel med vektor v eller ej.
         """
-        return self.det(self, v) == 0
+        return self.dot(self.normalized(), v.normalized()) == -1    
     
     def isPerpendicular(self, v):
         """
@@ -182,9 +181,22 @@ class Vector2d:
     
     def isOpposite(self, v):
         """
-        Returnerer om vektoren har modsat retning til vektor v eller ej
+        Returnerer om vektoren har modsat retning til vektor v eller ej.
         """
-        return self.negated().isEqual(v)
+        return self.negated().normalized().isEqual(v.normalized())
+
+    def toString(self):
+        """
+        Returnerer en streng indeholdende vektorens koordinater.
+        """
+        return f"[{self.getX()}, {self.getY()}]"
+
+    def draw(self, surface, X, Y):
+        """
+        Tegner vektoren med startpunkt i (X, Y)
+        """
+        color255 = (int(self.getColor()[0]*255), int(self.getColor()[1]*255), int(self.getColor()[2]*255))
+        pygame.draw.line(surface, color255, (X, Y), (X+self.getX(), Y+self.getY()), self.getWidth())
 
 
 if __name__ == "__main__":
@@ -193,9 +205,9 @@ if __name__ == "__main__":
     v3 = Vector2d.add2(v1, v2)
     v3.setName("vector 3 (sum of v1 and v2)")
 
-    print(f"v1: [{v1.getX()}, {v1.getY()}] \t '{v1.getName()}'")
-    print(f"v2: [{v2.getX()}, {v2.getY()}] \t '{v2.getName()}'")
-    print(f"v3: [{v3.getX()}, {v3.getY()}] \t '{v3.getName()}'")
+    print(f"v1: {v1.toString()} \t '{v1.getName()}'")
+    print(f"v2: {v2.toString()} \t '{v2.getName()}'")
+    print(f"v3: {v3.toString()} \t '{v3.getName()}'")
 
     v3.add(v2)
     print(f"v3+v2: [{v3.getX()}, {v3.getY()}] \t '{v3.getName()}'")
@@ -205,10 +217,10 @@ if __name__ == "__main__":
     v3 = Vector2d(-1, -1, name="vector 3")
     v4 = Vector2d(-3, 3, name="vector 4")
 
-    print(f"v1: [{v1.getX()}, {v1.getY()}] \t '{v1.getName()}'")
-    print(f"v2: [{v2.getX()}, {v2.getY()}] \t '{v2.getName()}'")
-    print(f"v3: [{v3.getX()}, {v3.getY()}] \t '{v3.getName()}'")
-    print(f"v4: [{v4.getX()}, {v4.getY()}] \t '{v4.getName()}'")
+    print(f"v1: {v1.toString()} \t '{v1.getName()}'")
+    print(f"v2: {v2.toString()} \t '{v2.getName()}'")
+    print(f"v3: {v3.toString()} \t '{v3.getName()}'")
+    print(f"v4: {v4.toString()} \t '{v4.getName()}'")
 
     print(f"length of v2 = {v2.getLen()}")
 
