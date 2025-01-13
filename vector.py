@@ -199,6 +199,29 @@ class Vector2d:
         pygame.draw.line(surface, color255, (X, Y), (X+self.getX(), Y+self.getY()), self.getWidth())
 
 
+
+class Vector:
+    def __init__(self, components: list, name="Vector"):
+        self.__components = components
+        self.__dimensions = len(self.__components)
+    
+    def setComp(self, n: int, value: float):
+        """
+        Sætter vektorens n'de koordinat til den givne værdi 'value'.
+        """
+        if n < self.__dimensions and n >= 0:
+            self.__components[n] = value
+        else:
+            raise Exception(f"The given dimension (n = {n}) does not exist within the vector {self}, which has {self.__dimensions} dimensions.")
+        
+    def toString(self):
+        componentsString = ""
+        for c in self.__components:
+            componentsString += f"{c}, "
+        return "[" + componentsString[:-2] + "]"
+
+
+"""
 if __name__ == "__main__":
     v1 = Vector2d(10, 5, name="vector 1")
     v2 = Vector2d(2, 2, name="vector 2")
@@ -230,3 +253,9 @@ if __name__ == "__main__":
     print(f"v1 is parallel with v3: {v1.isParallel(v3)}")
     print(f"v1 is perpendicular with v3: {v1.isPerpendicular(v3)}")
     print(f"v1 is perpendicular with v4: {v1.isPerpendicular(v4)}")
+"""
+
+if __name__ == "__main__":
+    v = Vector([0, 0, 0, 0])
+    v.setComp(1, 1)
+    print(v.toString())
