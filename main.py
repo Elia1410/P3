@@ -1,17 +1,16 @@
 import pygame
 from vector import Vector2d
 from random import randint, random
+from fish import Fish
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 
-vectors = []
-startPoints = []
-for i in range(100_000):
-    vectors.append(Vector2d(randint(-55, 55), randint(-55, 55), (random(), random(), random()), 2))
-    startPoints.append((randint(0, 1280), randint(0, 720)))
+fish = Fish(screen.get_width()/2, screen.get_height()/2, (255, 0, 0))
+fish.velo.setX(4)
+fish.velo.setY(2)
 
 while running:
     for event in pygame.event.get():
@@ -20,8 +19,8 @@ while running:
 
     screen.fill("beige")
 
-    for i, v in enumerate(vectors):
-        v.draw(screen, startPoints[i][0], startPoints[i][1])
+    fish.update()
+    fish.draw(screen)
 
     pygame.display.flip()
 

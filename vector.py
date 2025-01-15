@@ -14,11 +14,11 @@ class Vector2d:
         Instantieres en vektor uden argumenter, vil en nulvektor med \n
         predefineret navn, farve og bredde oprettes.
         """
-        self.setX(x)
-        self.setY(y)
-        self.setColor(color)
-        self.setWidth(width)
-        self.setName(name)
+        self.__x = x
+        self.__y = y
+        self.__color = color
+        self.__width = width
+        self.__name = name
 
     def getX(self):
         """
@@ -88,10 +88,10 @@ class Vector2d:
 
     def add(self, v):
         """
-        Lægger x- og y-koordinaterne til vektoren.
+        Lægger x- og y-koordinaterne af vectoren v til vektoren.
         """
         self.setX(self.getX()+v.getX())
-        self.setX(self.getY()+v.getY())
+        self.setY(self.getY()+v.getY())
     
     def add2(v1, v2):
         """
@@ -105,6 +105,15 @@ class Vector2d:
         """
         self.setX(self.getX()*mult)
         self.setY(self.getY()*mult)
+
+    def multiplied(self, mult):
+        """
+        Returnerer en ny vektor tilsvarende til den originale vektor ganget med mult.
+        """
+        copy = self.copy()
+        copy.multiply(mult)
+        return copy
+
     
     def dot(self, v1, v2):
         """
@@ -230,7 +239,6 @@ class Vector:
             componentsString += f"{c}, "
         return "[" + componentsString[:-2] + "]"
 
-
 """
 if __name__ == "__main__":
     v1 = Vector2d(10, 5, name="vector 1")
@@ -264,8 +272,15 @@ if __name__ == "__main__":
     print(f"v1 is perpendicular with v3: {v1.isPerpendicular(v3)}")
     print(f"v1 is perpendicular with v4: {v1.isPerpendicular(v4)}")
 """
-
 if __name__ == "__main__":
-    v = Vector([0, 0, 0, 0])
-    v.setComp(1, 1)
-    print(v.toString())
+    v1 = Vector2d(10, 10)
+    v2 = Vector2d(1, 1)
+    
+    print(v1.toString())
+    v1.add(v2)
+    print(v1.toString())
+    v1.add(v2)
+    print(v1.toString())
+    v1.add(v2)
+    print(v1.toString())
+    v1.add(v2)
