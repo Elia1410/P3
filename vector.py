@@ -144,7 +144,7 @@ class Vector2d:
         Ændrer ikke på den originale vektor.
         """
         copy = self.copy()
-        copy.normalize()
+        copy.normalize(len)
         return copy
     
     def negate(self):
@@ -171,13 +171,20 @@ class Vector2d:
         """
         Returnerer om vektoren er parallel med vektor v eller ej.
         """
-        return self.dot(self.normalized(), v.normalized()) == -1    
+        return self.normalized().isEqual(v.normalized())
     
     def isPerpendicular(self, v):
         """
         Returnerer om vektoren er vinkelret på vektor v eller ej.
         """
         return self.dot(self, v) == 0
+    
+    def perpendicular(self):
+        """
+        Returnerer den vinkelrette vektor til vektoren.
+        """
+        return Vector2d(-self.getY(), self.getX())
+        
     
     def isOpposite(self, v):
         """
@@ -196,6 +203,9 @@ class Vector2d:
         Tegner vektoren med startpunkt i (X, Y)
         """
         color255 = (int(self.getColor()[0]*255), int(self.getColor()[1]*255), int(self.getColor()[2]*255))
+        arrow = [
+
+        ]
         pygame.draw.line(surface, color255, (X, Y), (X+self.getX(), Y+self.getY()), self.getWidth())
 
 
