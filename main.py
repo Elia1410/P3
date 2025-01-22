@@ -8,9 +8,9 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 
-fish = Fish(screen.get_width()/2, screen.get_height()/2, (255, 0, 0))
-fish.velo.setX(4)
-fish.velo.setY(2)
+fish = []
+for i in range(1):
+    fish.append(Fish(Vector2d(screen.get_width()/2, screen.get_height()/2), Vector2d(1, 1), (0.8, 0, 0)))
 
 while running:
     for event in pygame.event.get():
@@ -19,8 +19,9 @@ while running:
 
     screen.fill("beige")
 
-    fish.update()
-    fish.draw(screen)
+    for f in fish:
+        f.update(fish)
+        f.draw(screen)
 
     pygame.display.flip()
 

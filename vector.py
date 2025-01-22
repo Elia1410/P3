@@ -68,7 +68,7 @@ class Vector2d:
         """
         self.__color = newColor
 
-    def setWidth(self, newWidth: float):
+    def setWidth(self, newWidth: int):
         """
         Sætter bredden på vektoren. Relevant når man vil tegne vektoren på skærmen.
         """
@@ -212,9 +212,6 @@ class Vector2d:
         Tegner vektoren med startpunkt i (X, Y)
         """
         color255 = (int(self.getColor()[0]*255), int(self.getColor()[1]*255), int(self.getColor()[2]*255))
-        arrow = [
-
-        ]
         pygame.draw.line(surface, color255, (X, Y), (X+self.getX(), Y+self.getY()), self.getWidth())
 
 
