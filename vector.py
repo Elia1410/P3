@@ -237,6 +237,10 @@ class Vector:
             componentsString += f"{c}, "
         return "[" + componentsString[:-2] + "]"
 
+
+
+# tests:
+
 """
 if __name__ == "__main__":
     v1 = Vector2d(10, 5, name="vector 1")
