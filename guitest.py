@@ -6,7 +6,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 
-tp.init(screen, tp.theme_classic)
+tp.init(screen, tp.theme_game2)
 
 button = tp.Button("button")
 button.set_center(screen.get_width()/3, screen.get_height()/2)

@@ -145,7 +145,8 @@ class Vector2d:
         """
         Normaliserer vektoren til længden 'len'. Standard værdien for 'len' er 1.
         """
-        self.multiply(len/self.getLen())
+        if self.getLen() != 0:
+            self.multiply(len/self.getLen())
 
     def normalized(self, len=1.0):
         """
