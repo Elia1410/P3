@@ -14,7 +14,7 @@ pygame.font.init()
 font = pygame.font.SysFont('Arial', 18)
 
 
-flock = Flock(screen, 50, 1, 1, 1, 2, True)
+flock = None
 
 def newFlock():
     global flock
@@ -58,9 +58,6 @@ def blitText(text: str, pos: tuple):
     textRendered = font.render(text, True, (0, 0, 0))
     screen.blit(textRendered, pos)
 
-
-newFlock()
-
 while running:
     events = pygame.event.get()
     for event in events:
@@ -68,8 +65,8 @@ while running:
             running = False
 
     screen.fill("beige")
-
-    flock.update()
+    if type(flock) == Flock:
+        flock.update()
 
     blitText("Cohesion", (330, 20))
     blitText("Seperation", (330, 50))

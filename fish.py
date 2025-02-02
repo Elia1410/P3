@@ -1,6 +1,6 @@
 from vector import Vector2d
 import pygame
-from random import choice, random
+from random import random
 from math import cos, sin, pi
 
 class Fish:
@@ -27,7 +27,7 @@ class Fish:
         pygame.draw.polygon(screen, [int(i*255) for i in self.color], polygonPoints)
         
         if self.drawTail:
-            # tegn hale lavet af linjer mellem fiskens 10 seneste positioner
+            # tegn hale lavet af linjer mellem fiskens 8 seneste positioner
             self.__trail.append((self.pos.getX(), self.pos.getY()))
             if len(self.__trail) > 8:
                 self.__trail.pop(0)
@@ -64,7 +64,7 @@ class Fish:
         return nearby
 
 
-class Pray(Fish):
+class Prey(Fish):
     def __init__(self, pos, velo, color, cohesion, seperation, alignment, drawTail):
         super().__init__(pos, velo, color, drawTail)
         self.cohesionMult = cohesion
@@ -82,29 +82,29 @@ class Pray(Fish):
         self.velo.add(behaviourForce)
         self.velo.normalize(self.speed)
 
-    def seperation(self):
-        force = Vector2d()
-        for f in self.nearbyFish:
-            diffVector = Vector2d(self.pos.getX() - f.pos.getX(), self.pos.getY() - f.pos.getY())
-            dist = diffVector.getLen()
-            if dist > 0:
-                force.add(diffVector.multiplied(1/dist**2))
-        return force.normalized()
+def seperation(self):
+    force = Vector2d()
+    for f in self.nearbyFish:
+        diffVector = Vector2d(self.pos.getX() - f.pos.getX(), self.pos.getY() - f.pos.getY())
+        dist = diffVector.getLen()
+        if dist > 0:
+            force.add(diffVector.multiplied(1/dist**2))
+    return force.normalized()
 
-    def alignment(self):
-        force = Vector2d()
-        for f in self.nearbyFish:
-            force.add(f.velo.multiplied(1/len(self.nearbyFish)))
-        return Vector2d(force.getX()-self.velo.getX(), force.getY()-self.velo.getY()).normalized()
+def alignment(self):
+    force = Vector2d()
+    for f in self.nearbyFish:
+        force.add(f.velo.multiplied(1/len(self.nearbyFish)))
+    return Vector2d(force.getX()-self.velo.getX(), force.getY()-self.velo.getY()).normalized()
 
-    def cohesion(self):
-        force = Vector2d()
-        if len(self.nearbyFish) > 0:
-            for f in self.nearbyFish:
-                force.add(f.pos.multiplied(1/len(self.nearbyFish)))
-            return Vector2d(force.getX()-self.pos.getX(), force.getY()-self.pos.getY()).normalized()
-        else:
-            return force
+def cohesion(self):
+    force = Vector2d()
+    if len(self.nearbyFish) > 0:
+        for f in self.nearbyFish:
+            force.add(f.pos.multiplied(1/len(self.nearbyFish)))
+        return Vector2d(force.getX()-self.pos.getX(), force.getY()-self.pos.getY()).normalized()
+    else:
+        return force
 
 
 class Flock:
@@ -118,7 +118,9 @@ class Flock:
                  drawTail: bool):
     
         self.screen = screen
-        self.flock = [Pray(self.__randomVector(), self.__randomVelo(speed), (1, 0, 0), cohesion, seperation, alignment, drawTail) for _ in range(numberOfFish)]
+
+        # opret liste af fisk med de givne indstilligner
+        self.flock = [Prey(self.__randomVector(), self.__randomVelo(speed), (1, 0, 0), cohesion, seperation, alignment, drawTail) for _ in range(numberOfFish)]
     
     def __randomVector(self):
         return Vector2d(random() * self.screen.get_width(), random() * self.screen.get_height())
