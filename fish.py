@@ -35,24 +35,25 @@ class Fish:
                 pygame.draw.lines(screen, [int(i*255) for i in self.color], False, self.__trail, 3)
 
     def update(self, group: list, screen: pygame.Surface):
+        # opdater listen af nærmeste fisk
         self.nearbyFish = self.getNearbyFish(group, self.maxDist)
+
+        # opdater fiskens position
         self.pos.add(self.velo)
 
-        # bouce on edge
+        # bounce på kanten af skærmen
         if self.pos.getX() > screen.get_width() and self.velo.getX() > 0:
             self.velo.setX(self.velo.getX() * -1)
-
         if self.pos.getY() > screen.get_height() and self.velo.getY() > 0:
             self.velo.setY(self.velo.getY() * -1)
-
         if self.pos.getX() < 0 and self.velo.getX() < 0:
             self.velo.setX(self.velo.getX() * -1)
-
         if self.pos.getY() < 0 and self.velo.getY() < 0:
             self.velo.setY(self.velo.getY() * -1)
     
     def getNearbyFish(self, group: list, maxDist: float):
         nearby = []
+        # loop over alle fisk i gruppen og returner en liste af dem som er indenfor afstanden maxDist
         for other in group:
             if other != self:
                 distVector = Vector2d()
@@ -72,42 +73,44 @@ class Prey(Fish):
         self.alignmentMult = alignment
 
     def update(self, group: list, screen: pygame.Surface):
-        super().update(group, screen)
-        
         behaviourForce = Vector2d()
         behaviourForce.add(self.seperation().multiplied(self.seperationMult))
         behaviourForce.add(self.alignment().multiplied(self.alignmentMult))
         behaviourForce.add(self.cohesion().multiplied(self.cohesionMult))
-
+        
+        # tilføj alle adfærdsvektorer til hastighedsvektoren
         self.velo.add(behaviourForce)
         self.velo.normalize(self.speed)
 
-def seperation(self):
-    force = Vector2d()
-    for f in self.nearbyFish:
-        diffVector = Vector2d(self.pos.getX() - f.pos.getX(), self.pos.getY() - f.pos.getY())
-        dist = diffVector.getLen()
-        if dist > 0:
-            force.add(diffVector.multiplied(1/dist**2))
-    return force.normalized()
+        super().update(group, screen)
 
-def alignment(self):
-    force = Vector2d()
-    for f in self.nearbyFish:
-        force.add(f.velo.multiplied(1/len(self.nearbyFish)))
-    return Vector2d(force.getX()-self.velo.getX(), force.getY()-self.velo.getY()).normalized()
-
-def cohesion(self):
-    force = Vector2d()
-    if len(self.nearbyFish) > 0:
+    def seperation(self): # seperation
+        force = Vector2d()
         for f in self.nearbyFish:
-            force.add(f.pos.multiplied(1/len(self.nearbyFish)))
-        return Vector2d(force.getX()-self.pos.getX(), force.getY()-self.pos.getY()).normalized()
-    else:
-        return force
+            diffVector = Vector2d(self.pos.getX() - f.pos.getX(), self.pos.getY() - f.pos.getY())
+            dist = diffVector.getLen()
+            if dist > 0:
+                force.add(diffVector.multiplied(1/dist**2))
+        return force.normalized()
+
+    def alignment(self): # justering
+        force = Vector2d()
+        for f in self.nearbyFish:
+            force.add(f.velo.multiplied(1/len(self.nearbyFish)))
+        return Vector2d(force.getX()-self.velo.getX(), force.getY()-self.velo.getY()).normalized()
+
+    def cohesion(self): # samhørighed
+        force = Vector2d()
+        if len(self.nearbyFish) > 0:
+            for f in self.nearbyFish:
+                force.add(f.pos.multiplied(1/len(self.nearbyFish)))
+            return Vector2d(force.getX()-self.pos.getX(), force.getY()-self.pos.getY()).normalized()
+        else:
+            return force
 
 
 class Flock:
+    # et flock objekt holder styr på mange fisk på en gang
     def __init__(self, 
                  screen: pygame.Surface, 
                  numberOfFish: int,

@@ -65,6 +65,7 @@ while running:
             running = False
 
     screen.fill("beige")
+    
     if type(flock) == Flock:
         flock.update()
 
